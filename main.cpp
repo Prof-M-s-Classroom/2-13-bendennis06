@@ -66,16 +66,71 @@ public:
         length--;
     }
 
-    void deleteNode(int index) {
-       //TODO:Write the function to delete at the given index. Reuse the pre-written functions for edge cases. Account for missing index.
+    Node<T>* get(int index) {
+        if (index < 0 || index >= length) {
+            return nullptr;
+        }
+        Node<T>* temp = head;
+        for (int i = 0; i < index; i++) {
+            temp = temp->next;
+        }
+        return temp;
     }
 
-   void insert(int index, T *value) {
+    void deleteNode(int index) {
+        if (index < 0 || index >= length)
+            return;
+        if (index == 0)
+            return delfirst();
+        if (index == length - 1)
+            return dellast();
+
+        Node<T> *prev = get(index - 1);
+        Node<T> *temp = prev->next;
+
+        prev->next = temp->next;
+        delete temp;
+        length--;
+
+        //TODO:Write the function to delete at the given index. Reuse the pre-written functions for edge cases. Account for missing index.
+    }
+
+
+
+    void insert(int index, T *value) {
+        if (index<0||index>length) {
+            cout<<"index out of range"<<endl;
+            return;
+        }
+        if (index==0) {
+            addHead(value);
+        }
+        if (index==length) {
+            add(value);
+        }
+        else {
+            Node<T>* newNode=new Node<T>(value);
+            Node<T>* temp = get(index-1);
+            newNode-next=temp->next;
+            temp->next=newNode;
+            length++;
+        }
         //TODO:Write a function to insert a new node at a give index. Reuse the pre-written functions for edge cases. Account for missing index
     }
 
-   void reverselist(){
+    void reverselist(){
         //TODO:Write a function to reverse the list using the logic from the slide.
+        Node<T> *next;
+        Node<T> *prev = NULL;
+        Node<T> *curr = head;
+
+        while (curr!=NULL) {
+            next=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=next;
+        }
+        head=prev;
     }
 
     void print() {
@@ -99,5 +154,9 @@ int main() {
     ll->delfirst();
     ll->print();
     ll->dellast();
+    ll->print();
+    ll->reverselist();
+    ll->print();
+    ll->deleteNode(0);
     ll->print();
 }
